@@ -1,0 +1,41 @@
+<apex:component >
+	<apex:attribute name="boundElemId" description="This is the id of the form to bind the value of this slider to" type="String" required="true"/>
+	<apex:attribute name="uniqueId" description="the unique form id to be leveraged by this component" type="String" required="true"/>
+	<apex:attribute name="minValue" description="the minimum value possible within the slider" type="Integer" required="true"/>
+	<apex:attribute name="maxValue" description="the maximum value possible within the slider" type="Integer" required="true"/>
+	<apex:attribute name="startValue" description="the start value within the slider" type="Integer" required="true"/>
+	<apex:attribute name="unitPrefix" description="any desired prefix to the unit value, for example a dollar sign" type="String" required="false"/>
+	<apex:attribute name="unitSuffix" description="any desired suffix to the unit value" type="String" required="false"/>
+
+	<apex:includeScript value="{!URLFOR($Resource.jquery, 'js/jquery-1.3.2.min.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.jquery, 'js/jquery-ui-1.7.2.custom.min.js')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.jquery, 'css/ui-lightness/jquery-ui-1.7.2.custom.css')}"/>
+    
+    <script type="text/javascript">    
+        //This will load as soon as the page is ready and will setup our slider
+        $(document).ready(function(){
+            $("#{!uniqueId}").slider({ //This line creates a slider on the DIV specified, options are passed arguments, comma separated below
+                min: {!minValue}, //Min value for slider
+                max: {!maxValue}, //Max value for slider
+                values: ['{!FlOOR(startValue)}'], //Start values for the slider
+                slide: function(event, ui){ //This function executes every time slider is moved and applies the slider values to the input fields as well as the output below the slider
+                    document.getElementById('{!boundElemId}').value = ui.values[0];
+                    $("#{!uniqueId}-amountValue").html('{!unitPrefix}' + ui.values[0] + '{!unitSuffix}');
+                }
+            }); 
+ 
+            //This line executes only once right after the page is loaded and after the slider is initialized. It creates the "$273K - $611K" text on load
+            $("#{!uniqueId}-amountValue").html('{!unitPrefix}' + $("#{!uniqueId}").slider("values", 0) + '{!unitSuffix}');
+            //$("#-amountValue").html(("#{!uniqueId}").slider("values", 0));
+        });
+    </script>
+    
+    <!-- This is where our slider will be -->
+	<div>
+		<span id="lowEnd" style="float:left;">{!unitPrefix}{!minValue}{!unitSuffix}</span>&nbsp;
+		<span id="highEnd" style="float:right;">{!unitPrefix}{!maxValue}{!unitSuffix}</span>
+	</div>
+	<div id="{!uniqueId}" style="font-size: 90%; margin-top: 0.5em;"></div>
+	<div id="{!uniqueId}-amountValue" style="text-align: center;"></div>
+	
+</apex:component>

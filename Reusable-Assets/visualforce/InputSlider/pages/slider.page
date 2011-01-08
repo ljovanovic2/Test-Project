@@ -1,0 +1,20 @@
+<apex:page standardController="Demo__c" id="page" showheader="false">
+    <apex:form id="form">
+        <apex:pageBlock mode="edit" id="block">
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Save" action="{!save}" />
+            </apex:pageBlockButtons> 
+ 
+            <apex:pageBlockSection >
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Component Test"/>
+                    <apex:pageBlockSectionItem >
+						<c:inputSlider boundElemId="{!$Component.page.form.block.budgetHigh}" uniqueId="comptest" minValue="200" maxValue="1500" startValue="{!Demo__c.Dollar_Amount__c}" unitPrefix="$" unitSuffix=".00"/>
+                    </apex:pageBlockSectionItem>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+            
+            <apex:inputHidden value="{!Demo__c.Dollar_Amount__c}" id="budgetHigh"/>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>
